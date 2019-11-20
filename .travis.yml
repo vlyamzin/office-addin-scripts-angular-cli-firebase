@@ -1,0 +1,12 @@
+sudo: true
+dist: trusty
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+      - docker build -t office-addin-scripts-angular-cli-firebase --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION=`cat VERSION` .
+      - docker images
+      - docker tag office-addin-scripts-angular-cli-firebase vlyamzin/office-addin-scripts-angular-cli-firebase
+      - docker push vlyamzin/office-addin-scripts-angular-cli-firebase
